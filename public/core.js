@@ -28,20 +28,22 @@
                 });
         };
 
+
         $scope.deleteTodo = function(id){
 
             var todo_id = id.substring(1);
             var url = '/api/todos/' + todo_id;
 
-          $http.delete(url)
-              .success(function(data){
-                  $scope.todos = data;
-                  console.log(data);
-
-              })
-              .error(function(data){
-                  console.log(data);
-              });
+            // use instead of $http.delete - IE 8 crashes when using delete
+            // see http://tech.pro/tutorial/1238/angularjs-and-ie8-gotcha-http-delete
+            $http({method: 'DELETE', url: url }).
+                success(function(data, status, headers, config){
+                    $scope.todos = data;
+                    console.log(data);
+                }).
+                error(function(data, status, headers, config){
+                    console.log(data);
+                });
         };
 
     };
